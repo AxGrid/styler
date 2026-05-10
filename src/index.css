@@ -1,0 +1,533 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* =====================================================================
+   DESIGN TOKENS
+   The whole design system is driven by these CSS variables.
+   Switching themes is just a matter of swapping this block by setting
+   data-theme="light" | "dark" on <html>.
+   ===================================================================== */
+
+:root,
+[data-theme="light"] {
+  --brand-50:  #FFF4EB;
+  --brand-100: #FFE4D0;
+  --brand-200: #FFC59E;
+  --brand-300: #FFA66C;
+  --brand-400: #FF8A40;
+  --brand-500: #FF6B1A;
+  --brand-600: #E85610;
+  --brand-700: #B8430C;
+  --brand-800: #8A3208;
+  --brand-900: #5C2105;
+
+  --bg:                 #FFFFFF;
+  --bg-elevated:        #FFFFFF;
+  --surface:            #F7F7F7;
+  --surface-2:          #F0F0F0;
+  --surface-hover:      #ECECEC;
+
+  --fg:                 #1A1A1A;
+  --fg-muted:           #6B6B6B;
+  --fg-subtle:          #999999;
+  --fg-on-brand:        #FFFFFF;
+
+  --border:             #E5E5E5;
+  --border-strong:      #D0D0D0;
+  --ring:               color-mix(in oklab, var(--brand-500) 60%, transparent);
+
+  --accent:             var(--brand-500);
+  --accent-hover:       var(--brand-600);
+  --accent-active:      var(--brand-700);
+  --accent-fg:          #FFFFFF;
+
+  --success:            #16A34A;
+  --success-fg:         #FFFFFF;
+  --success-bg:         #F0FDF4;
+
+  --warning:            #D97706;
+  --warning-fg:         #FFFFFF;
+  --warning-bg:         #FEF3C7;
+
+  --danger:             #DC2626;
+  --danger-fg:          #FFFFFF;
+  --danger-bg:          #FEF2F2;
+
+  --info:               #2563EB;
+  --info-fg:            #FFFFFF;
+  --info-bg:            #EFF6FF;
+
+  --overlay:            color-mix(in oklab, #000 35%, transparent);
+  --glass-bg:           color-mix(in oklab, #FFFFFF 70%, transparent);
+  --glass-border:       color-mix(in oklab, #000 8%, transparent);
+
+  --shadow-xs: 0 1px 2px 0 color-mix(in oklab, #000 5%, transparent);
+  --shadow-sm: 0 1px 3px 0 color-mix(in oklab, #000 8%, transparent),
+               0 1px 2px -1px color-mix(in oklab, #000 6%, transparent);
+  --shadow-md: 0 4px 12px -2px color-mix(in oklab, #000 10%, transparent),
+               0 2px 4px -2px color-mix(in oklab, #000 6%, transparent);
+  --shadow-lg: 0 12px 32px -8px color-mix(in oklab, #000 15%, transparent),
+               0 4px 12px -4px color-mix(in oklab, #000 8%, transparent);
+  --shadow-xl: 0 24px 48px -12px color-mix(in oklab, #000 22%, transparent),
+               0 8px 24px -8px color-mix(in oklab, #000 10%, transparent);
+  --shadow-glow: 0 0 0 4px color-mix(in oklab, var(--brand-500) 18%, transparent);
+
+  /* Gradients & easings — used by buttons, cards, hero. */
+  --grad-brand:         linear-gradient(180deg, var(--brand-400) 0%, var(--brand-600) 100%);
+  --grad-brand-pressed: linear-gradient(180deg, var(--brand-600) 0%, var(--brand-700) 100%);
+  --grad-surface:       linear-gradient(180deg, var(--bg-elevated) 0%, var(--surface) 100%);
+
+  --shadow-brand-sm:
+    inset 0 1px 0 0 color-mix(in oklab, white 30%, transparent),
+    0 1px 2px 0 color-mix(in oklab, var(--brand-600) 35%, transparent);
+  --shadow-brand-md:
+    inset 0 1px 0 0 color-mix(in oklab, white 30%, transparent),
+    0 1px 2px 0 color-mix(in oklab, var(--brand-600) 30%, transparent),
+    0 6px 16px -4px color-mix(in oklab, var(--brand-500) 45%, transparent);
+  --shadow-brand-lg:
+    inset 0 1px 0 0 color-mix(in oklab, white 35%, transparent),
+    0 2px 4px 0 color-mix(in oklab, var(--brand-600) 30%, transparent),
+    0 14px 32px -6px color-mix(in oklab, var(--brand-500) 55%, transparent);
+
+  --shadow-soft-glow:
+    0 12px 36px -12px color-mix(in oklab, var(--brand-500) 35%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--brand-500) 12%, transparent);
+
+  /* Cards on light bg — inset top highlight + crisp 1px shadow + diffuse warm halo. */
+  --shadow-card:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+    0 1px 2px 0 rgba(15, 12, 8, 0.04),
+    0 4px 12px -2px rgba(15, 12, 8, 0.06),
+    0 18px 40px -12px color-mix(in oklab, var(--brand-500) 12%, rgba(15, 12, 8, 0.04));
+
+  /* Field focus — base ring + extended brand halo around focused inputs. */
+  --shadow-focus:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--ring),
+    0 10px 28px -8px color-mix(in oklab, var(--brand-500) 28%, transparent);
+  --shadow-focus-danger:
+    0 0 0 2px var(--bg),
+    0 0 0 4px color-mix(in oklab, var(--danger) 55%, transparent),
+    0 10px 28px -8px color-mix(in oklab, var(--danger) 28%, transparent);
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="dark"] {
+  --brand-50:  #2A1505;
+  --brand-100: #3D1F08;
+  --brand-200: #5C2E0C;
+  --brand-300: #8A4513;
+  --brand-400: #C26020;
+  --brand-500: #FF7A2E;
+  --brand-600: #FF8F4D;
+  --brand-700: #FFA66C;
+  --brand-800: #FFC093;
+  --brand-900: #FFE0CB;
+
+  --bg:                 #0A0A0A;
+  --bg-elevated:        #111111;
+  --surface:            #161616;
+  --surface-2:          #1F1F1F;
+  --surface-hover:      #242424;
+
+  --fg:                 #FAFAFA;
+  --fg-muted:           #A1A1A1;
+  --fg-subtle:          #666666;
+  --fg-on-brand:        #0A0A0A;
+
+  --border:             #262626;
+  --border-strong:      #383838;
+  --ring:               color-mix(in oklab, var(--brand-500) 65%, transparent);
+
+  --accent:             var(--brand-500);
+  --accent-hover:       var(--brand-600);
+  --accent-active:      var(--brand-700);
+  --accent-fg:          #0A0A0A;
+
+  --success:            #22C55E;
+  --success-fg:         #0A0A0A;
+  --success-bg:         color-mix(in oklab, #22C55E 12%, transparent);
+
+  --warning:            #F59E0B;
+  --warning-fg:         #0A0A0A;
+  --warning-bg:         color-mix(in oklab, #F59E0B 14%, transparent);
+
+  --danger:             #EF4444;
+  --danger-fg:          #FFFFFF;
+  --danger-bg:          color-mix(in oklab, #EF4444 14%, transparent);
+
+  --info:               #3B82F6;
+  --info-fg:            #FFFFFF;
+  --info-bg:            color-mix(in oklab, #3B82F6 14%, transparent);
+
+  --overlay:            color-mix(in oklab, #000 60%, transparent);
+  --glass-bg:           color-mix(in oklab, #FFFFFF 6%, transparent);
+  --glass-border:       color-mix(in oklab, #FFFFFF 10%, transparent);
+
+  --shadow-xs: 0 1px 2px 0 rgba(0,0,0,0.4);
+  --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.5), 0 1px 2px -1px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0,0,0,0.6), 0 2px 4px -2px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px -8px rgba(0,0,0,0.7), 0 4px 12px -4px rgba(0,0,0,0.5);
+  --shadow-xl: 0 24px 48px -12px rgba(0,0,0,0.8), 0 8px 24px -8px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 0 4px color-mix(in oklab, var(--brand-500) 28%, transparent);
+
+  /* Dark — gradient runs lighter→darker the same way, but using the dark ramp.
+   * The white inset highlight is dialed down so it doesn't look washed out
+   * against the saturated orange. */
+  --grad-brand:         linear-gradient(180deg, var(--brand-700) 0%, var(--brand-500) 100%);
+  --grad-brand-pressed: linear-gradient(180deg, var(--brand-500) 0%, var(--brand-400) 100%);
+  --grad-surface:       linear-gradient(180deg, var(--bg-elevated) 0%, var(--surface) 100%);
+
+  --shadow-brand-sm:
+    inset 0 1px 0 0 color-mix(in oklab, white 16%, transparent),
+    0 1px 2px 0 color-mix(in oklab, var(--brand-500) 30%, transparent);
+  --shadow-brand-md:
+    inset 0 1px 0 0 color-mix(in oklab, white 16%, transparent),
+    0 1px 2px 0 color-mix(in oklab, var(--brand-500) 25%, transparent),
+    0 8px 24px -4px color-mix(in oklab, var(--brand-500) 50%, transparent);
+  --shadow-brand-lg:
+    inset 0 1px 0 0 color-mix(in oklab, white 20%, transparent),
+    0 2px 4px 0 color-mix(in oklab, var(--brand-500) 25%, transparent),
+    0 18px 40px -8px color-mix(in oklab, var(--brand-500) 60%, transparent);
+
+  --shadow-soft-glow:
+    0 16px 44px -16px color-mix(in oklab, var(--brand-500) 50%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--brand-500) 16%, transparent);
+
+  /* Dark cards — inset top highlight (subtle white sheen on near-black surface)
+   * + softer ambient depth, no warm halo (would be invisible on dark anyway). */
+  --shadow-card:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 1px 2px 0 rgba(0, 0, 0, 0.5),
+    0 8px 24px -6px rgba(0, 0, 0, 0.5),
+    0 0 0 1px color-mix(in oklab, var(--brand-500) 4%, transparent);
+
+  --shadow-focus:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--ring),
+    0 12px 32px -8px color-mix(in oklab, var(--brand-500) 36%, transparent);
+  --shadow-focus-danger:
+    0 0 0 2px var(--bg),
+    0 0 0 4px color-mix(in oklab, var(--danger) 60%, transparent),
+    0 12px 32px -8px color-mix(in oklab, var(--danger) 35%, transparent);
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'SF Pro Display', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace;
+
+  --color-bg:            var(--bg);
+  --color-bg-elevated:   var(--bg-elevated);
+  --color-surface:       var(--surface);
+  --color-surface-2:     var(--surface-2);
+  --color-surface-hover: var(--surface-hover);
+  --color-fg:            var(--fg);
+  --color-fg-muted:      var(--fg-muted);
+  --color-fg-subtle:     var(--fg-subtle);
+  --color-fg-on-brand:   var(--fg-on-brand);
+  --color-border:        var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring:          var(--ring);
+
+  --color-brand-50:  var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+
+  --color-accent:        var(--accent);
+  --color-accent-hover:  var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-accent-fg:     var(--accent-fg);
+
+  --color-success:       var(--success);
+  --color-success-fg:    var(--success-fg);
+  --color-success-bg:    var(--success-bg);
+  --color-warning:       var(--warning);
+  --color-warning-fg:    var(--warning-fg);
+  --color-warning-bg:    var(--warning-bg);
+  --color-danger:        var(--danger);
+  --color-danger-fg:     var(--danger-fg);
+  --color-danger-bg:     var(--danger-bg);
+  --color-info:          var(--info);
+  --color-info-fg:       var(--info-fg);
+  --color-info-bg:       var(--info-bg);
+
+  --color-overlay:       var(--overlay);
+  --color-glass-bg:      var(--glass-bg);
+  --color-glass-border:  var(--glass-border);
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-glow: var(--shadow-glow);
+  --shadow-brand-sm: var(--shadow-brand-sm);
+  --shadow-brand-md: var(--shadow-brand-md);
+  --shadow-brand-lg: var(--shadow-brand-lg);
+  --shadow-soft-glow: var(--shadow-soft-glow);
+  --shadow-card: var(--shadow-card);
+  --shadow-focus: var(--shadow-focus);
+  --shadow-focus-danger: var(--shadow-focus-danger);
+
+  --ease-spring: var(--ease-spring);
+  --ease-smooth: var(--ease-smooth);
+
+  --animate-fade-in: fadeIn 200ms ease-out;
+  --animate-slide-up: slideUp 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-scale-in: scaleIn 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-float-slow: float-slow 14s ease-in-out infinite;
+  --animate-float-slower: float-slow 20s ease-in-out infinite reverse;
+  --animate-pulse-glow: pulse-glow 3.2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96) }
+  to   { opacity: 1; transform: scale(1) }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1) }
+  33%      { transform: translate3d(40px, -28px, 0) scale(1.05) }
+  66%      { transform: translate3d(-32px, 36px, 0) scale(0.96) }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6 }
+  50%      { opacity: 1 }
+}
+
+/* Honour user preference — no decorative motion. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .animate-float-slower,
+  .animate-pulse-glow,
+  .animate-shimmer { animation: none !important; }
+}
+
+@layer base {
+  *, *::before, *::after { border-color: var(--border); }
+  html { color-scheme: light dark; }
+  html, body, #root { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: color-mix(in oklab, var(--brand-500) 35%, transparent); }
+  /* Outline-reset only. Each component owns its focus-visible ring. */
+  :focus-visible { outline: none; }
+  /* Native form elements: drop default chrome. Components rebuild visuals. */
+  input:where(:not([type='checkbox']):not([type='radio'])),
+  textarea,
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 8px;
+    border: 2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--fg-subtle); }
+}
+
+@utility glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+}
+
+@utility glass-strong {
+  background: color-mix(in oklab, var(--bg) 70%, transparent);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility brand-gradient {
+  background: linear-gradient(135deg, var(--brand-400) 0%, var(--brand-600) 100%);
+}
+
+@utility shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--fg) 6%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
+
+/* Subtle brand-tinted text glow for headings. Use sparingly — hero h1 + section h2. */
+@utility text-glow {
+  text-shadow:
+    0 0 28px color-mix(in oklab, var(--brand-500) 20%, transparent),
+    0 0 4px color-mix(in oklab, var(--brand-500) 8%, transparent);
+}
+
+/* ----------------------------------------------------------------------
+ * Sonner toast — full visual override.
+ *
+ * All visuals live here (instead of in <Toaster> classNames) for two reasons:
+ *   1. Tailwind v4 changed the bang-modifier syntax (suffix, not prefix), so
+ *      the legacy `!shadow-lg` / `!bg-…` classes silently fail.
+ *   2. Targeting [data-sonner-toast] directly with !important wins over
+ *      whatever sonner ships in its own stylesheet.
+ *
+ * Per-type identity uses three layers, all colour-matched:
+ *   • a 3 px solid left bar — instant glance recognition,
+ *   • a 1 px coloured ring,
+ *   • a wide diffuse halo (55 % opacity) — readable from a distance,
+ *   • plus a small neutral drop shadow for ambient depth.
+ * --------------------------------------------------------------------- */
+[data-sonner-toaster] [data-sonner-toast] {
+  background: var(--bg-elevated) !important;
+  color: var(--fg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  font-family: var(--font-sans) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  /* Default (no type) — brand-tinted halo so untyped toasts still feel on-brand. */
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--brand-500) 14%, transparent),
+    0 18px 44px -10px color-mix(in oklab, var(--brand-500) 30%, transparent),
+    0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+}
+[data-sonner-toast] [data-title] {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+[data-sonner-toast] [data-description] {
+  color: var(--fg-muted) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+}
+[data-sonner-toast] [data-button] {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 500 !important;
+  padding: 0 10px !important;
+}
+/* Close button — relocated from sonner's default top-left (which collided
+ * with our coloured 3 px border-left identifier) to the top-right edge.
+ * Coloured in the brand orange so it's instantly readable as a control. */
+[data-sonner-toaster] {
+  /* Sonner reads these when rendering the close button position. */
+  --toast-close-button-start: unset;
+  --toast-close-button-end: 0;
+  --toast-close-button-transform: translate(35%, -35%);
+}
+[data-sonner-toast] [data-close-button] {
+  /* Belt-and-braces — explicitly force right-edge placement in case the
+   * version of sonner being used doesn't honour the variables above. */
+  left: auto !important;
+  right: 0 !important;
+  transform: translate(35%, -35%) !important;
+
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--accent) !important;
+  border-radius: 9999px !important;
+  width: 20px !important;
+  height: 20px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+  transition: background-color 180ms ease, color 180ms ease,
+              border-color 180ms ease, box-shadow 180ms ease !important;
+}
+[data-sonner-toast] [data-close-button] svg {
+  width: 12px !important;
+  height: 12px !important;
+  stroke-width: 2.5 !important;
+}
+[data-sonner-toast] [data-close-button]:hover {
+  background: var(--accent) !important;
+  color: var(--accent-fg) !important;
+  border-color: var(--accent) !important;
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--brand-500) 22%, transparent),
+    0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Success — green identity. */
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] {
+  border-left: 3px solid var(--success) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--success) 38%, transparent),
+    0 18px 44px -10px color-mix(in oklab, var(--success) 55%, transparent),
+    0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+}
+[data-sonner-toast][data-type="success"] [data-icon] { color: var(--success) !important; }
+
+/* Error — red identity. */
+[data-sonner-toaster] [data-sonner-toast][data-type="error"] {
+  border-left: 3px solid var(--danger) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--danger) 40%, transparent),
+    0 18px 44px -10px color-mix(in oklab, var(--danger) 60%, transparent),
+    0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+}
+[data-sonner-toast][data-type="error"] [data-icon] { color: var(--danger) !important; }
+
+/* Warning — amber identity. */
+[data-sonner-toaster] [data-sonner-toast][data-type="warning"] {
+  border-left: 3px solid var(--warning) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--warning) 40%, transparent),
+    0 18px 44px -10px color-mix(in oklab, var(--warning) 60%, transparent),
+    0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+}
+[data-sonner-toast][data-type="warning"] [data-icon] { color: var(--warning) !important; }
+
+/* Info — blue identity. */
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] {
+  border-left: 3px solid var(--info) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--info) 38%, transparent),
+    0 18px 44px -10px color-mix(in oklab, var(--info) 55%, transparent),
+    0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+}
+[data-sonner-toast][data-type="info"] [data-icon] { color: var(--info) !important; }
