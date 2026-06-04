@@ -1383,9 +1383,17 @@ var DialogOverlay = forwardRef(({ className, ...props }, ref) => /* @__PURE__ */
 	...props
 }));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
-var DialogContent = forwardRef(({ className, children, showClose = true, ...props }, ref) => /* @__PURE__ */ jsxs(DialogPortal, { children: [/* @__PURE__ */ jsx(DialogOverlay, {}), /* @__PURE__ */ jsxs(DialogPrimitive.Content, {
+var dialogSizes = {
+	sm: "max-w-sm",
+	md: "max-w-lg",
+	lg: "max-w-2xl",
+	xl: "max-w-4xl",
+	"2xl": "max-w-6xl",
+	full: "max-w-[min(95vw,1600px)]"
+};
+var DialogContent = forwardRef(({ className, children, showClose = true, size = "md", ...props }, ref) => /* @__PURE__ */ jsxs(DialogPortal, { children: [/* @__PURE__ */ jsx(DialogOverlay, {}), /* @__PURE__ */ jsxs(DialogPrimitive.Content, {
 	ref,
-	className: cn("fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4", "rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-6", "[box-shadow:var(--shadow-xl),0_0_0_1px_color-mix(in_oklab,var(--brand-500)_8%,transparent),0_24px_64px_-12px_color-mix(in_oklab,var(--brand-500)_22%,transparent)]", "duration-300 ease-[var(--ease-smooth)]", "data-[state=open]:animate-in data-[state=closed]:animate-out", "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0", "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95", "data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:slide-out-to-bottom-2", className),
+	className: cn("fixed left-1/2 top-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4", dialogSizes[size], "rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-6", "[box-shadow:var(--shadow-xl),0_0_0_1px_color-mix(in_oklab,var(--brand-500)_8%,transparent),0_24px_64px_-12px_color-mix(in_oklab,var(--brand-500)_22%,transparent)]", "duration-300 ease-[var(--ease-smooth)]", "data-[state=open]:animate-in data-[state=closed]:animate-out", "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0", "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95", "data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:slide-out-to-bottom-2", className),
 	...props,
 	children: [children, showClose && /* @__PURE__ */ jsxs(DialogClose, {
 		className: cn("absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)]", "text-fg-muted hover:bg-surface hover:text-fg", "transition-colors focus-visible:outline-none", "focus-visible:[box-shadow:0_0_0_2px_var(--bg),0_0_0_4px_var(--ring)]"),

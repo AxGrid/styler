@@ -26,16 +26,35 @@ export const DialogOverlay = forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+// Named max-widths so callers pick a size via a prop instead of fighting
+// tailwind-merge. `max-w-lg` (base) and a caller's `md:max-w-6xl` live in
+// different variant groups, so merge keeps BOTH and the winner depends on CSS
+// order — that's why width overrides used to need `!`. Pass `size` instead, or
+// drop an unprefixed `max-w-*` in className (that one merges correctly).
+const dialogSizes = {
+  sm: 'max-w-sm',
+  md: 'max-w-lg',
+  lg: 'max-w-2xl',
+  xl: 'max-w-4xl',
+  '2xl': 'max-w-6xl',
+  // 95% of the viewport, capped so ultrawide screens don't stretch absurdly.
+  full: 'max-w-[min(95vw,1600px)]',
+} as const
+
 export const DialogContent = forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { showClose?: boolean }
->(({ className, children, showClose = true, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    showClose?: boolean
+    size?: keyof typeof dialogSizes
+  }
+>(({ className, children, showClose = true, size = 'md', ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4',
+        'fixed left-1/2 top-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-4',
+        dialogSizes[size],
         'rounded-[var(--radius-xl)] border border-border bg-bg-elevated p-6',
         // Layered shadow: deep ambient + subtle brand-tinted halo so the
         // modal feels like it's lit from the page accent, not just floating.
